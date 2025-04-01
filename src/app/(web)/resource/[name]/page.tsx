@@ -38,9 +38,9 @@ import { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 }): Promise<Metadata> {
-  const { name } = await params;
+  const name = (await params).name;
   const resource = await getResourceByPinyin(name);
   return {
     title: `${resource?.title || ""}${
@@ -55,10 +55,10 @@ export async function generateMetadata({
 export default async function ResourcePage({
   params,
 }: {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 }) {
-  const path = await params;
-  const resource = await getResourceByPinyin(path.name);
+  const name = (await params).name;
+  const resource = await getResourceByPinyin(name);
 
   if (!resource) {
     return (

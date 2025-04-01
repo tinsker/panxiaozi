@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -85,7 +85,7 @@ export default function AdminCategory() {
       // 无论成功或失败，都将加载状态设为false
       setLoading(false);
     }
-  }; 
+  };
 
   const saveCategory = async (name: string, key: string, id?: number) => {
     const res = await fetch(`/api/category/save`, {
@@ -106,7 +106,8 @@ export default function AdminCategory() {
 
   // 编辑状态
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState<Partial<Category> | null>(null);
+  const [currentCategory, setCurrentCategory] =
+    useState<Partial<Category> | null>(null);
   const [dialogTitle, setDialogTitle] = useState("添加新分类");
 
   // 使用 React Hook Form
@@ -194,173 +195,182 @@ export default function AdminCategory() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] p-4 text-sm">
-      <form onSubmit={handleSubmit(onSearch)} className="mb-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-2">
-          <div className="flex items-center gap-2">
-            <Label htmlFor="search-name" className="text-left">
-              分类名称
-            </Label>
-            <Input
-              id="search-name"
-              placeholder="搜索分类名称"
-              {...register("name")}
-              className="flex-1"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Button type="submit" className="mr-2">
-              搜索
-            </Button>
-            <Button type="button" variant="outline" onClick={handleReset}>
-              重置
-            </Button>
-          </div>
-        </div>
-      </form>
-
-      <div className="flex justify-between items-center mb-2">
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2" onClick={openAddDialog}>
-              <PlusCircle className="h-4 w-4" />
-              添加分类
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{dialogTitle}</DialogTitle>
-              <DialogDescription>
-                {currentCategory ? "修改分类信息" : "填写以下信息创建新的分类"}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="category-name" className="text-right">
-                  名称
-                </Label>
-                <Input
-                  id="category-name"
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="category-key" className="text-right">
-                  key
-                </Label>
-                <Input
-                  id="category-key"
-                  value={categoryKey}
-                  onChange={(e) => setCategoryKey(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
+    <Suspense fallback={<div>加载中...</div>}>
+      <div className="flex flex-col h-[calc(100vh-4rem)] p-4 text-sm">
+        <form onSubmit={handleSubmit(onSearch)} className="mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-2">
+            <div className="flex items-center gap-2">
+              <Label htmlFor="search-name" className="text-left">
+                分类名称
+              </Label>
+              <Input
+                id="search-name"
+                placeholder="搜索分类名称"
+                {...register("name")}
+                className="flex-1"
+              />
             </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsDialogOpen(false)}
-              >
-                取消
+            <div className="flex items-center gap-2">
+              <Button type="submit" className="mr-2">
+                搜索
               </Button>
-              <Button onClick={handleSaveCategory}>保存</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+              <Button type="button" variant="outline" onClick={handleReset}>
+                重置
+              </Button>
+            </div>
+          </div>
+        </form>
 
-      <div className="rounded-md border flex-1 overflow-hidden flex flex-col">
-        <div className="overflow-auto flex-1">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>id</TableHead>
-                <TableHead>名称</TableHead>
-                <TableHead>key</TableHead>
-                <TableHead className="text-right">操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                // 加载状态显示
+        <div className="flex justify-between items-center mb-2">
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="flex items-center gap-2"
+                onClick={openAddDialog}
+              >
+                <PlusCircle className="h-4 w-4" />
+                添加分类
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{dialogTitle}</DialogTitle>
+                <DialogDescription>
+                  {currentCategory
+                    ? "修改分类信息"
+                    : "填写以下信息创建新的分类"}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="category-name" className="text-right">
+                    名称
+                  </Label>
+                  <Input
+                    id="category-name"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="category-key" className="text-right">
+                    key
+                  </Label>
+                  <Input
+                    id="category-key"
+                    value={categoryKey}
+                    onChange={(e) => setCategoryKey(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  取消
+                </Button>
+                <Button onClick={handleSaveCategory}>保存</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="rounded-md border flex-1 overflow-hidden flex flex-col">
+          <div className="overflow-auto flex-1">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
-                    <div className="flex justify-center items-center">
-                      <svg
-                        className="animate-spin h-5 w-5 mr-3 text-primary"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      <span>加载中...</span>
-                    </div>
-                  </TableCell>
+                  <TableHead>id</TableHead>
+                  <TableHead>名称</TableHead>
+                  <TableHead>key</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
                 </TableRow>
-              ) : categories.length === 0 ? (
-                // 无数据状态显示
-                <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
-                    暂无数据
-                  </TableCell>
-                </TableRow>
-              ) : (
-                // 数据列表显示
-                categories.map((category) => (
-                  <TableRow key={category.id}>
-                    <TableCell className="font-medium">{category.id}</TableCell>
-                    <TableCell>{category.name}</TableCell>
-                    <TableCell>{category.key}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => openEditDialog(category)}
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  // 加载状态显示
+                  <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center">
+                      <div className="flex justify-center items-center">
+                        <svg
+                          className="animate-spin h-5 w-5 mr-3 text-primary"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
                         >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDeleteCategory(category.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        <span>加载中...</span>
                       </div>
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : categories.length === 0 ? (
+                  // 无数据状态显示
+                  <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center">
+                      暂无数据
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  // 数据列表显示
+                  categories.map((category) => (
+                    <TableRow key={category.id}>
+                      <TableCell className="font-medium">
+                        {category.id}
+                      </TableCell>
+                      <TableCell>{category.name}</TableCell>
+                      <TableCell>{category.key}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => openEditDialog(category)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => handleDeleteCategory(category.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-4 py-2">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => {
+              setPage(newPage);
+            }}
+          />
         </div>
       </div>
-
-      <div className="flex justify-center mt-4 py-2">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(newPage) => {
-            setPage(newPage);
-          }}
-        />
-      </div>
-    </div>
+    </Suspense>
   );
 }

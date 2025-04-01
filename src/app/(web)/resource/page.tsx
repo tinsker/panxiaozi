@@ -4,6 +4,7 @@ import Pagination from "@/components/pagination";
 import SearchForm from "@/components/search-form";
 import { getResourcePageList } from "@/lib/db/queries/resource";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 // export const generateMetadata = async ({
 //   params,
@@ -28,9 +29,9 @@ import { Metadata } from "next";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: { q: string };
+  searchParams: Promise<{ q: string }>;
 }): Promise<Metadata> {
-  const query = searchParams.q;
+  const query = (await searchParams).q;
 
   if (!query) {
     return {
@@ -49,7 +50,7 @@ export async function generateMetadata({
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q: string; page: string; category: string };
+  searchParams: Promise<{ q: string; page: string; category: string }>;
 }) {
   // 获取搜索参数
   const param = await searchParams;
@@ -87,7 +88,9 @@ export default async function SearchPage({
           <SearchResults list={data.list} />
           {totalPages > 0 && (
             <div className="mt-8">
-              <Pagination currentPage={page} totalPages={totalPages} />
+              <Suspense fallback={<div>加载中...</div>}>
+                <Pagination currentPage={page} totalPages={totalPages} />
+              </Suspense>
             </div>
           )}
         </div>
