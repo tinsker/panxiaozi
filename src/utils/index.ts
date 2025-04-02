@@ -8,7 +8,7 @@ export const getTotalPages = (total: number, pageSize: number) => {
     }
   }
   return totalPages;
-}
+};
 
 export const formatDate = (date: Date) => {
   return date.toLocaleDateString("zh-CN", {
@@ -16,4 +16,12 @@ export const formatDate = (date: Date) => {
     month: "long",
     day: "numeric",
   });
+};
+
+// 文本超过省略
+export const ellipsisText = (text: string, maxLength: number = 10) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.slice(0, maxLength) + "...";
 };

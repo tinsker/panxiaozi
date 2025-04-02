@@ -5,7 +5,7 @@ import { ClientSideNavigation } from "./client-side-navigation";
 import { getCategoryList } from "@/lib/db/queries/category";
 import type { Category, Resource } from "@/lib/db/schema";
 import { getHomeResource } from "@/lib/db/queries/resource";
-import { formatDate } from "@/utils";
+import { ellipsisText, formatDate } from "@/utils";
 
 type ResourcesMap = {
   [categoryId: string]: Resource[];
@@ -105,7 +105,7 @@ export async function ResourceList() {
                             <div className="flex flex-col gap-2">
                               <div className="flex items-center justify-between">
                                 <h3 className="font-medium text-base line-clamp-1">
-                                  {resource.title}
+                                  {ellipsisText(resource.title)}
                                 </h3>
                                 <span className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
                                   {resource.diskType}
