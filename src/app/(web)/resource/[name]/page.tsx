@@ -14,6 +14,7 @@ import { getResourceByPinyin } from "@/lib/db/queries/resource";
 import { ClientLink } from "@/components/client-link";
 import ClickboardButton from "@/components/clickboard-button";
 import { Metadata } from "next";
+import { formatDate } from "@/utils";
 
 // export const generateMetadata = async ({
 //   params,
@@ -106,9 +107,7 @@ export default async function ResourcePage({
           <div className="flex items-center">
             <span className="font-medium mr-2">更新时间:</span>
             <span className="text-muted-foreground">
-              {resource.updatedAt
-                ? new Date(resource.updatedAt).toLocaleDateString()
-                : "未知"}
+              {resource.updatedAt ? formatDate(resource.updatedAt) : "未知"}
             </span>
           </div>
         </div>

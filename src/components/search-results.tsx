@@ -1,7 +1,7 @@
 import { Resource } from "@/lib/db/schema";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
-
+import { formatDate } from "@/utils";
 interface SearchResultsProps {
   list: Resource[];
 }
@@ -28,7 +28,7 @@ export default async function SearchResults({ list }: SearchResultsProps) {
               </div>
               <p className="mt-2 text-gray-600 text-sm">{result.desc}</p>
               <p className="mt-2 text-gray-600 text-sm">
-                {result.updatedAt?.toLocaleString()}
+                更新时间：{result.updatedAt ? formatDate(result.updatedAt) : "未知"}
               </p>
             </Link>
           </div>

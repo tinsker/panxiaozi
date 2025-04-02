@@ -9,3 +9,11 @@ export const getTotalPages = (total: number, pageSize: number) => {
   }
   return totalPages;
 }
+
+export const formatDate = (date: Date) => {
+  return date.toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};

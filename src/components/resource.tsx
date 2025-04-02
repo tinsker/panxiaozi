@@ -5,6 +5,7 @@ import { ClientSideNavigation } from "./client-side-navigation";
 import { getCategoryList } from "@/lib/db/queries/category";
 import type { Category, Resource } from "@/lib/db/schema";
 import { getHomeResource } from "@/lib/db/queries/resource";
+import { formatDate } from "@/utils";
 
 type ResourcesMap = {
   [categoryId: string]: Resource[];
@@ -129,9 +130,7 @@ export async function ResourceList() {
                                 <span>
                                   更新时间:{" "}
                                   {resource.updatedAt
-                                    ? new Date(
-                                        resource.updatedAt
-                                      ).toLocaleDateString()
+                                    ? formatDate(resource.updatedAt)
                                     : "未知"}
                                 </span>
                               </div>
