@@ -6,26 +6,6 @@ import { getResourcePageList } from "@/lib/db/queries/resource";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
-// export const generateMetadata = async ({
-//   params,
-// }: {
-//   params: { q: string };
-// }) => {
-//   const query = params.q;
-//   if (!query) {
-//     return {
-//       title: "资源列表 - 盘小子",
-//       description:
-//         "盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达",
-//     };
-//   }
-
-//   return {
-//     title: `${query}在线网盘资源搜索下载 - 盘小子`,
-//     description: `盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达`,
-//   };
-// };
-
 export async function generateMetadata({
   searchParams,
 }: {
