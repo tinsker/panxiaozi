@@ -1,6 +1,8 @@
 import { getAllResource } from "@/lib/db/queries/resource";
 import { MetadataRoute } from "next";
 
+export const revalidate = 300;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 基础URL
   const baseUrl = "https://pan.xiaozi.cc";

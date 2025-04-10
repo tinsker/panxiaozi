@@ -6,6 +6,7 @@ import {
   datetime,
   index,
   tinyint,
+  unique,
 } from "drizzle-orm/mysql-core";
 
 // 分类表定义
@@ -29,7 +30,10 @@ export const resource = mysqlTable(
     isShowHome: tinyint("is_show_home").default(0),
     updatedAt: datetime("updated_at").default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [index("idx_hot_num").on(table.hotNum)]
+  (table) => [
+    index("idx_hot_num").on(table.hotNum),
+    unique("unique_title").on(table.title),
+  ]
 );
 
 export const user = mysqlTable("user", {
