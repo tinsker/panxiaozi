@@ -5,25 +5,35 @@ import SearchForm from "@/components/search-form";
 import { getResourcePageList } from "@/lib/db/queries/resource";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { getCategoryByKey } from "@/lib/db/queries/category";
 
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ q: string }>;
+  searchParams: Promise<{ q: string; category: string }>;
 }): Promise<Metadata> {
   const query = (await searchParams).q;
+  const category = (await searchParams).category;
 
-  if (!query) {
+  if (query) {
     return {
-      title: "在线网盘资源搜索下载 - 盘小子",
-      description:
-        "盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达",
+      title: `${query}在线网盘资源搜索下载 - 盘小子`,
+      description: `盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达`,
+    };
+  }
+
+  if (category) {
+    const categoryInfo = await getCategoryByKey(category);
+    return {
+      title: `${categoryInfo.name}在线网盘资源搜索下载 - 盘小子`,
+      description: `盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达`,
     };
   }
 
   return {
-    title: `${query}在线网盘资源搜索下载 - 盘小子`,
-    description: `盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达`,
+    title: "在线网盘资源搜索下载 - 盘小子",
+    description:
+      "盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达",
   };
 }
 

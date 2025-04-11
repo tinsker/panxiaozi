@@ -7,6 +7,14 @@ export async function getCategoryList(): Promise<Category[]> {
   return await db.select().from(category);
 }
 
+export async function getCategoryByKey(key: string): Promise<Category> {
+  const result = await db.select().from(category).where(eq(category.key, key));
+  if (result.length === 0) {
+    throw new Error("Category not found");
+  }
+  return result[0];
+}
+
 export async function getCategoryPageList(
   page = 1,
   pageSize = 10,

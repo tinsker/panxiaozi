@@ -1,3 +1,4 @@
+import { getCategoryList } from "@/lib/db/queries/category";
 import { getAllResource } from "@/lib/db/queries/resource";
 import { MetadataRoute } from "next";
 
@@ -31,6 +32,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const categories = await getCategoryList();
+  const categoryRoutes = categories.map((category) => ({
+    url: `${baseUrl}/resource?category=${category.key}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.7,
+  }));
+
   const queryRoutes = resources.map((resource) => ({
     url: `${baseUrl}/resource?q=${resource.title}`,
     lastModified: resource.updatedAt || new Date(),
@@ -38,5 +47,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...resourceRoutes, ...queryRoutes];
+  return [
+    ...staticRoutes,
+    ...categoryRoutes,
+    ...resourceRoutes,
+    ...queryRoutes,
+  ];
 }

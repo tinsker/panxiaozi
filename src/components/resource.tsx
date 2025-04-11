@@ -76,7 +76,7 @@ export async function ResourceList() {
                     <h2 className="text-lg font-bold">{category.name}</h2>
                     {resources[category.key]?.length > 12 && (
                       <Link
-                        href={`/category/${category.key}`}
+                        href={`/resource?category=${category.key}`}
                         className="text-sm text-blue-500 hover:underline flex items-center gap-1"
                       >
                         查看更多

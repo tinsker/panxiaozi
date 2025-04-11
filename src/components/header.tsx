@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "./ui/button"
-import { Logo } from "./logo"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { Logo } from "./logo";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { label: "首页", href: "/" },
   { label: "资源", href: "/resource" },
-]
+  { label: "联系我们", href: "/contact" },
+];
 
 export function Header() {
-  const pathname = usePathname()
-  
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container flex h-16 items-center justify-between">
@@ -24,24 +24,24 @@ export function Header() {
           <nav className="hidden md:flex">
             <ul className="flex gap-5">
               {navItems.map((item) => {
-                const isActive = 
-                  pathname === item.href || 
-                  (item.href !== "/" && pathname?.startsWith(item.href))
-                
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== "/" && pathname?.startsWith(item.href));
+
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
                       className={`text-sm font-medium ${
-                        isActive 
-                          ? "text-blue-500 font-semibold" 
+                        isActive
+                          ? "text-blue-500 font-semibold"
                           : "text-gray-600 hover:text-blue-500"
                       }`}
                     >
                       {item.label}
                     </Link>
                   </li>
-                )
+                );
               })}
             </ul>
           </nav>
@@ -56,5 +56,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
