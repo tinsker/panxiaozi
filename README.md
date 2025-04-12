@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="./public/logos/logo.svg" width="100" height="100">
+</p>
+<h1 align="center">盘小子</h1>
 
-## Getting Started
+## 项目简介
 
-First, run the development server:
+盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+<p align="center">
+  <img src="./screenshot/home.png">
+</p>
+
+
+在线体验：https://pan.xiaozi.cc
+
+## 主要特性
+
+- 🚀 基于 Next.js 15 的现代 React 应用
+- 🎨 美观的 UI 设计，使用 Tailwind CSS 和 Radix UI 组件
+- 📱 响应式设计，适配各种设备屏幕
+- 🔒 完整的用户认证系统
+- 🗃️ 基于 Drizzle ORM 的数据库管理
+
+## 技术栈
+
+- **前端框架**: Next.js 15, React 18
+- **UI 组件**: Radix UI, TailwindCSS
+- **状态管理**: React Hooks, Contexts
+- **表单处理**: React Hook Form
+- **数据验证**: Zod
+- **数据库 ORM**: Drizzle ORM
+- **API 路由**: Hono
+- **认证**: JWT
+- **开发工具**: TypeScript, Drizzle Kit
+
+## 安装指南
+
+### 前提条件
+
+- Node.js 18+
+- MySQL 数据库（或使用 PlanetScale）
+
+### 环境变量设置
+
+在项目根目录创建`.env.local`文件，添加以下配置（根据您的环境修改）:
+
+```
+DATABASE_HOST=your-database-host
+DATABASE_PORT=3306
+DATABASE_USERNAME=your-username
+DATABASE_PASSWORD=your-password
+DATABASE_NAME=your-database-name
+JWT_SECRET=your-jwt-secret
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 安装步骤
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. 克隆仓库：
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone <repository-url>
+   cd panxiaozi
+   ```
 
-## Learn More
+2. 安装依赖：
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   # 或
+   pnpm install
+   # 或
+   yarn install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. 数据库设置：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   # 生成数据库迁移文件
+   npm run db:generate
 
-## Deploy on Vercel
+   # 应用数据库迁移
+   npm run db:push
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. 启动开发服务器：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   ```
+
+5. 打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+
+## 项目命令
+
+- `npm run dev` - 启动开发服务器
+- `npm run build` - 构建生产版本
+- `npm run start` - 启动生产服务器
+- `npm run lint` - 运行代码检查
+- `npm run db:generate` - 生成数据库迁移文件
+- `npm run db:push` - 应用数据库迁移
+- `npm run db:studio` - 启动 Drizzle 数据库管理界面
+
+## 部署
+
+该项目可以部署在任何支持 Node.js 的平台上，如 Vercel、Netlify 等。项目中已包含`netlify.toml`配置文件，方便在 Netlify 上部署。
+
+## 许可证
+
+[MIT](LICENSE)
