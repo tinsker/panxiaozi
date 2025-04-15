@@ -6,27 +6,30 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Category } from "@/lib/db/schema";
 
 interface CategoryButtonProps {
-  category: Category
+  category: Category;
 }
 
 export default function CategoryButton({ category }: CategoryButtonProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
-  
-  const isActive = 
-    currentCategory === category.key || 
+
+  const isActive =
+    currentCategory === category.key ||
     (!currentCategory && category.key === "all");
 
   const handleCategoryClick = () => {
     const params = new URLSearchParams(searchParams.toString());
-    
+
     if (category.key === "all") {
       params.delete("category");
     } else {
       params.set("category", category.key);
     }
-    
+
+    params.delete("page");
+    params.delete("q");
+
     const pathname = window.location.pathname;
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -43,4 +46,4 @@ export default function CategoryButton({ category }: CategoryButtonProps) {
       {category.name}
     </Button>
   );
-} 
+}
