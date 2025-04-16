@@ -13,10 +13,15 @@ export async function getHomeResource(): Promise<Resource[]> {
 }
 
 export async function getAllResource(): Promise<Resource[]> {
-  return await db
-    .select()
-    .from(resource)
-    .orderBy(desc(resource.id));
+  return await db.select().from(resource).orderBy(desc(resource.id));
+}
+
+export async function getResourceCount(): Promise<number> {
+  const result = await db.select({ value: count() }).from(resource);
+  if (result.length > 0) {
+    return result[0].value;
+  }
+  return 3306;
 }
 
 export async function getResourcePageList(
@@ -92,18 +97,16 @@ export async function saveResource(
       })
       .where(eq(resource.id, id));
   } else {
-    await db
-      .insert(resource)
-      .values({
-        title,
-        categoryKey,
-        url,
-        pinyin,
-        desc,
-        diskType,
-        hotNum,
-        isShowHome,
-      });
+    await db.insert(resource).values({
+      title,
+      categoryKey,
+      url,
+      pinyin,
+      desc,
+      diskType,
+      hotNum,
+      isShowHome,
+    });
   }
 }
 

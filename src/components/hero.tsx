@@ -2,11 +2,13 @@ import { Logo } from "./logo";
 import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
 import SearchForm from "./search-form";
-import { getHotResource } from "@/lib/db/queries/resource";
-import { Suspense } from "react";
+import { getHotResource, getResourceCount } from "@/lib/db/queries/resource";
+
+export const dynamic = "force-dynamic";
 
 export async function Hero() {
   const hotResources = await getHotResource();
+  const count = await getResourceCount();
   return (
     <div className="bg-blue-50 py-12">
       <div className="container grid grid-cols-1 md:grid-cols-1 gap-8 items-center flex-col">
@@ -15,12 +17,10 @@ export async function Hero() {
             <Logo size={28} />
             <h1 className="text-2xl font-bold text-blue-500">盘小子</h1>
             <span className="text-gray-700">已收录</span>
-            <span className="text-blue-500 font-bold">3306</span>
+            <span className="text-blue-500 font-bold">{count + 3306}</span>
             <span className="text-gray-700">个高质量资源</span>
           </div>
-          <Suspense fallback={<div>加载中...</div>}>
-            <SearchForm path="/resource" />
-          </Suspense>
+          <SearchForm path="/resource" />
         </div>
         <div>
           <Card className="h-full">
