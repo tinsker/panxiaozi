@@ -3,8 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
 import SearchForm from "./search-form";
 import { getHotResource, getResourceCount } from "@/lib/db/queries/resource";
-
-export const dynamic = "force-dynamic";
+import { Suspense } from "react";
 
 export async function Hero() {
   const hotResources = await getHotResource();
@@ -20,7 +19,9 @@ export async function Hero() {
             <span className="text-blue-500 font-bold">{count + 3306}</span>
             <span className="text-gray-700">个高质量资源</span>
           </div>
-          <SearchForm path="/resource" />
+          <Suspense fallback={<div>加载中...</div>}>
+            <SearchForm path="/resource" />
+          </Suspense>
         </div>
         <div>
           <Card className="h-full">
