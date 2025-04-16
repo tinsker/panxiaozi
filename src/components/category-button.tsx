@@ -28,7 +28,6 @@ export default function CategoryButton({ category }: CategoryButtonProps) {
     }
 
     params.delete("page");
-    params.delete("q");
 
     const pathname = window.location.pathname;
     router.push(`${pathname}?${params.toString()}`);
