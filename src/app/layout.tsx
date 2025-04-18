@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import { Analytics } from "@vercel/analytics/react"
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,10 +45,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
-      <body className={inter.className}>
-        {children}
-        <Analytics />
-      </body>
+      <body className={inter.className}>{children}</body>
+      <Script
+        src="https://umami.xiaozi.cc/script.js"
+        data-website-id="3ee3abd4-dbdc-47aa-a0a0-f5defc29d76f"
+        defer
+      />
     </html>
   );
 }
