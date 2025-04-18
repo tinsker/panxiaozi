@@ -1,10 +1,4 @@
-# 全局规则
 User-agent: *
 Allow: /
 
-# 禁止访问管理后台
-Disallow: /admin/
-Disallow: /admin/*
-
-# 网站地图
 Sitemap: https://pan.xiaozi.cc/sitemap.xml
