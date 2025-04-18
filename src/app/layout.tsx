@@ -29,6 +29,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "https://pan.xiaozi.cc",
+    creator: "@towelong",
     title: "盘小子 - 免费网盘资源搜索引擎 | 一站式网盘搜索平台",
     description:
       "盘小子为您提供免费的网盘资源搜索服务，支持多个主流网盘平台。快速精准搜索，一键直达，让您轻松找到需要的资源。安全无广告，简单好用。",
