@@ -32,35 +32,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const categories = await getCategoryList();
-  const categoryRoutes = categories.map((category) => {
-    if (category.key === "all") {
-      return {
-        url: `${baseUrl}/resource`,
-        lastModified: new Date(),
-        changeFrequency: "daily" as const,
-        priority: 0.7,
-      };
-    }
-    return {
-      url: `${baseUrl}/resource?category=${category.key}`,
-      lastModified: new Date(),
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    };
-  });
-
-  const queryRoutes = resources.map((resource) => ({
-    url: `${baseUrl}/resource?q=${resource.title}`,
-    lastModified: resource.updatedAt || new Date(),
-    changeFrequency: "daily" as const,
-    priority: 0.7,
-  }));
-
-  return [
-    ...staticRoutes,
-    ...categoryRoutes,
-    ...resourceRoutes,
-    ...queryRoutes,
-  ];
+  return [...staticRoutes, ...resourceRoutes];
 }
