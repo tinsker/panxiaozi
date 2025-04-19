@@ -7,7 +7,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col antialiased">
       <Header />
       <div className="flex-grow">
         {children}

@@ -45,12 +45,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
-      <body className={inter.className}>{children}</body>
-      <Script
-        src="https://umami.xiaozi.cc/script.js"
-        data-website-id="3ee3abd4-dbdc-47aa-a0a0-f5defc29d76f"
-        defer
-      />
+      <body className={inter.className}>
+        {children}
+        <Script
+          src="https://umami.xiaozi.cc/script.js"
+          data-website-id="3ee3abd4-dbdc-47aa-a0a0-f5defc29d76f"
+          defer
+        />
+      </body>
     </html>
   );
 }

@@ -6,10 +6,10 @@ export const metadata: Metadata = {
     "盘小子致力于打造一站式网盘资源搜索平台。我们仅提供搜索服务，不存储、上传或分发任何网盘内容。",
 };
 
-export default function AboutPage() {
+export default function ContactPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8 text-center">关于我们</h1>
+    <div className="container flex flex-col items-center px-4 py-12">
+      <h1 className="text-3xl font-bold mb-8 text-center">联系我们</h1>
 
       <div className="prose prose-lg mx-auto">
         <p className="mb-4">

@@ -21,7 +21,7 @@ const PaginationContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ul
     ref={ref}
-    className={cn("flex flex-row items-center gap-1", className)}
+    className={cn("flex flex-row items-center gap-1 flex-wrap", className)}
     {...props}
   />
 ))
@@ -54,6 +54,7 @@ const PaginationLink = ({
         size,
       }),
       isActive && "bg-blue-600 hover:bg-blue-700 text-white",
+      "min-w-7 h-8 sm:min-w-9 sm:h-9 p-1 sm:p-2",
       className
     )}
     {...props}
@@ -69,11 +70,11 @@ const PaginationPrevious = ({
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    className={cn("gap-1 pl-2.5 whitespace-nowrap", className)}
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
-    <span>{children}</span>
+    <span className="sm:inline hidden">{children}</span>
   </PaginationLink>
 )
 PaginationPrevious.displayName = "PaginationPrevious"
@@ -86,10 +87,10 @@ const PaginationNext = ({
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn("gap-1 pr-2.5", className)}
+    className={cn("gap-1 pr-2.5 whitespace-nowrap", className)}
     {...props}
   >
-    <span>{children}</span>
+    <span className="sm:inline hidden">{children}</span>
     <ChevronRight className="h-4 w-4" />
   </PaginationLink>
 )

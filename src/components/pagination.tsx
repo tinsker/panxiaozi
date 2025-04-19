@@ -10,6 +10,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useScreen } from "usehooks-ts";
+import { useEffect, useState } from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -27,6 +29,12 @@ export default function Pagination({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const screen = useScreen();
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // 为每个页码创建正确的URL参数
   const createPageUrl = (pageNum: number) => {
@@ -51,20 +59,38 @@ export default function Pagination({
     if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) {
       return;
     }
-    
+
     // 调用父组件传入的回调函数
     if (onPageChange) {
       onPageChange(pageNum);
     }
-    
+
     // 导航到新页面
     router.push(createPageUrl(pageNum));
+  };
+  
+  // 基于屏幕宽度确定要显示的页码数量
+  const getMaxPagesToShow = () => {
+    // 如果还没有挂载或者screen是undefined，返回默认值
+    if (!isMounted || !screen) {
+      return 5; // 默认值
+    }
+    
+    const width = screen?.width || 0;
+    
+    if (width < 480) {
+      return 5; // 移动设备显示5页
+    } else if (width < 768) {
+      return 6; // 平板设备显示6页
+    } else {
+      return 8; // 桌面显示8页
+    }
   };
 
   // 生成页码数组
   const getPageNumbers = () => {
     const pages = [];
-    const maxPagesToShow = 5;
+    const maxPagesToShow = getMaxPagesToShow();
 
     if (totalPages <= maxPagesToShow) {
       // 如果总页数小于等于要显示的最大页数，显示所有页码
@@ -95,7 +121,7 @@ export default function Pagination({
 
   return (
     <ShadcnPagination>
-      <PaginationContent>
+      <PaginationContent className="flex-wrap">
         <PaginationItem>
           <PaginationPrevious
             href={currentPage > 1 ? createPageUrl(currentPage - 1) : "#"}
@@ -112,23 +138,26 @@ export default function Pagination({
           </PaginationPrevious>
         </PaginationItem>
 
-        {showEllipsisStart && (
-          <>
-            <PaginationItem>
-              <PaginationLink 
-                href={createPageUrl(1)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange(1);
-                }}
-              >
-                1
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          </>
+        {/* 始终显示第一页 */}
+        {pageNumbers[0] !== 1 && (
+          <PaginationItem>
+            <PaginationLink
+              href={createPageUrl(1)}
+              onClick={(e) => {
+                e.preventDefault();
+                handlePageChange(1);
+              }}
+              isActive={currentPage === 1}
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {showEllipsisStart && pageNumbers[0] > 2 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
         )}
 
         {pageNumbers.map((page) => (
@@ -146,24 +175,29 @@ export default function Pagination({
           </PaginationItem>
         ))}
 
-        {showEllipsisEnd && (
-          <>
+        {showEllipsisEnd &&
+          pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
+          )}
+
+        {/* 始终显示最后一页 */}
+        {pageNumbers[pageNumbers.length - 1] !== totalPages &&
+          totalPages > 1 && (
             <PaginationItem>
-              <PaginationLink 
+              <PaginationLink
                 href={createPageUrl(totalPages)}
                 onClick={(e) => {
                   e.preventDefault();
                   handlePageChange(totalPages);
                 }}
+                isActive={currentPage === totalPages}
               >
                 {totalPages}
               </PaginationLink>
             </PaginationItem>
-          </>
-        )}
+          )}
 
         <PaginationItem>
           <PaginationNext
