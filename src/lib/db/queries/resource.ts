@@ -1,4 +1,4 @@
-import { and, count, desc, eq, like } from "drizzle-orm";
+import { and, count, desc, eq, like, or } from "drizzle-orm";
 import { db } from "../index";
 import { Resource, resource } from "../schema";
 import { PageResult } from "@/types";
@@ -126,4 +126,23 @@ export async function getResourceByPinyin(
     return null;
   }
   return list[0];
+}
+
+export async function getRelatedResources(title: string): Promise<Resource[]> {
+  // 生成递进的子串数组
+  let substrings = Array.from({ length: title.length }, (_, i) =>
+    title.slice(0, i + 1)
+  );
+  substrings = substrings.reverse();
+  console.log(substrings);
+
+  const list = await db
+    .select()
+    .from(resource)
+    .where(
+      or(...substrings.map((substr) => like(resource.title, `${substr}%`)))
+    )
+    .limit(10);
+
+  return list;
 }

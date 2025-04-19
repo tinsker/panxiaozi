@@ -10,11 +10,15 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { getResourceByPinyin } from "@/lib/db/queries/resource";
+import {
+  getRelatedResources,
+  getResourceByPinyin,
+} from "@/lib/db/queries/resource";
 import { ClientLink } from "@/components/client-link";
 import ClickboardButton from "@/components/clickboard-button";
 import { Metadata } from "next";
 import { formatDate } from "@/utils";
+import { Resource } from "@/lib/db/schema";
 
 // export const generateMetadata = async ({
 //   params,
@@ -60,6 +64,10 @@ export default async function ResourcePage({
 }) {
   const name = (await params).name;
   const resource = await getResourceByPinyin(name);
+  let relatedResources: Resource[] = [];
+  if (resource && resource?.title) {
+    relatedResources = await getRelatedResources(resource?.title as string);
+  }
 
   if (!resource) {
     return (
@@ -156,15 +164,15 @@ export default async function ResourcePage({
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">同类资源</h2>
           <Link
-            href="/more"
+            href={`/resource?q=${resource.title}`}
             className="text-sm text-muted-foreground hover:underline flex items-center"
           >
             更多 <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          {resource.relatedResources.map((item, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          {relatedResources.map((item, index) => (
             <div key={item.id} className="flex items-center">
               <span className="text-primary font-medium mr-2">{index + 1}</span>
               <Link
@@ -175,7 +183,7 @@ export default async function ResourcePage({
               </Link>
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
     </div>
   );
