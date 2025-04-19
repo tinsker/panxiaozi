@@ -134,8 +134,6 @@ export async function getRelatedResources(title: string): Promise<Resource[]> {
     title.slice(0, i + 1)
   );
   substrings = substrings.reverse();
-  console.log(substrings);
-
   const list = await db
     .select()
     .from(resource)
