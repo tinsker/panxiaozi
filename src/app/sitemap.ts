@@ -13,16 +13,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: "daily",
+      changeFrequency: "daily" as const,
       priority: 1,
+      images: ["https://pan.xiaozi.cc/og.png"],
     },
     {
       url: `${baseUrl}/resource`,
       lastModified: new Date(),
-      changeFrequency: "always",
+      changeFrequency: "daily" as const,
       priority: 0.9,
     },
-  ] as const;
+  ];
 
   const resources = await getAllResource();
   const resourceRoutes = resources.map((resource) => ({
