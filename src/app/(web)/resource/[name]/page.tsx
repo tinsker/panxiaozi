@@ -176,7 +176,7 @@ export default async function ResourcePage({
             <div key={item.id} className="flex items-center">
               <span className="text-primary font-medium mr-2">{index + 1}</span>
               <Link
-                href={`/resource/${encodeURIComponent(item.title)}`}
+                href={`/resource/${item.pinyin}`}
                 className="hover:text-primary hover:underline truncate"
               >
                 {item.title}
