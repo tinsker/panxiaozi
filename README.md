@@ -103,7 +103,9 @@ JWT_SECRET=your-jwt-secret
 
 ## 部署
 
-该项目可以部署在任何支持 Node.js 的平台上，如 Vercel、Netlify 等。项目中已包含`netlify.toml`配置文件，方便在 Netlify 上部署。
+该项目可以部署在任何支持 Node.js 的平台上，如 Zeabur、Vercel、Netlify 等。
+
+[![Deployed on Zeabur](https://zeabur.com/deployed-on-zeabur-dark.svg)](https://zeabur.com/referral?referralCode=towelong&utm_source=towelong&utm_campaign=oss)
 
 ## 许可证
 
