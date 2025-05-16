@@ -16,67 +16,67 @@ const rootDir = path.resolve(__dirname, "../..");
 dotenv.config({ path: path.join(rootDir, ".env.local") });
 
 async function createAdmin() {
-  try {
-    console.log("数据库连接信息:");
-    console.log("HOST:", process.env.DATABASE_HOST);
-    console.log("PORT:", process.env.DATABASE_PORT);
-    console.log("DATABASE:", process.env.DATABASE_NAME);
-    console.log("USER:", process.env.DATABASE_USERNAME);
+	try {
+		console.log("数据库连接信息:");
+		console.log("HOST:", process.env.DATABASE_HOST);
+		console.log("PORT:", process.env.DATABASE_PORT);
+		console.log("DATABASE:", process.env.DATABASE_NAME);
+		console.log("USER:", process.env.DATABASE_USERNAME);
 
-    // 创建直接的数据库连接
-    console.log("准备连接数据库...");
+		// 创建直接的数据库连接
+		console.log("准备连接数据库...");
 
-    const connection = await mysql.createConnection({
-      host: process.env.DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT),
-      user: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-    });
+		const connection = await mysql.createConnection({
+			host: process.env.DATABASE_HOST,
+			port: Number(process.env.DATABASE_PORT),
+			user: process.env.DATABASE_USERNAME,
+			password: process.env.DATABASE_PASSWORD,
+			database: process.env.DATABASE_NAME,
+		});
 
-    console.log("数据库连接成功");
+		console.log("数据库连接成功");
 
-    // 创建 Drizzle 实例
-    const db = drizzle(connection);
+		// 创建 Drizzle 实例
+		const db = drizzle(connection);
 
-    // 生成管理员密码
-    const username = "admin@qq.com";
-    const plainPassword = "test123";
+		// 生成管理员密码
+		const username = "admin@qq.com";
+		const plainPassword = "test123";
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(plainPassword, salt);
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(plainPassword, salt);
 
-    // 检查用户是否已存在
-    const existingUsers = await db
-      .select()
-      .from(user)
-      .where(eq(user.username, username));
+		// 检查用户是否已存在
+		const existingUsers = await db
+			.select()
+			.from(user)
+			.where(eq(user.username, username));
 
-    if (existingUsers.length > 0) {
-      console.log("用户名已存在，将更新密码");
-      await db
-        .update(user)
-        .set({ password: hashedPassword })
-        .where(eq(user.username, username));
-    } else {
-      console.log("创建新管理员用户");
-      await db.insert(user).values({
-        username,
-        password: hashedPassword,
-      });
-    }
+		if (existingUsers.length > 0) {
+			console.log("用户名已存在，将更新密码");
+			await db
+				.update(user)
+				.set({ password: hashedPassword })
+				.where(eq(user.username, username));
+		} else {
+			console.log("创建新管理员用户");
+			await db.insert(user).values({
+				username,
+				password: hashedPassword,
+			});
+		}
 
-    console.log("加密后的密码:", hashedPassword);
-    console.log("管理员用户创建/更新成功！");
-    console.log("用户名:", username);
-    console.log("密码:", plainPassword);
+		console.log("加密后的密码:", hashedPassword);
+		console.log("管理员用户创建/更新成功！");
+		console.log("用户名:", username);
+		console.log("密码:", plainPassword);
 
-    await connection.end();
-    process.exit(0);
-  } catch (error) {
-    console.error("创建管理员用户失败:", error);
-    process.exit(1);
-  }
+		await connection.end();
+		process.exit(0);
+	} catch (error) {
+		console.error("创建管理员用户失败:", error);
+		process.exit(1);
+	}
 }
 
 createAdmin();

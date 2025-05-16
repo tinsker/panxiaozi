@@ -4,56 +4,56 @@ import { PageResult } from "@/types";
 import { like, eq, and, count, desc } from "drizzle-orm";
 // 获取所有分类
 export async function getCategoryList(): Promise<Category[]> {
-  return await db.select().from(category);
+	return await db.select().from(category);
 }
 
 export async function getCategoryByKey(key: string): Promise<Category> {
-  const result = await db.select().from(category).where(eq(category.key, key));
-  if (result.length === 0) {
-    throw new Error("Category not found");
-  }
-  return result[0];
+	const result = await db.select().from(category).where(eq(category.key, key));
+	if (result.length === 0) {
+		throw new Error("Category not found");
+	}
+	return result[0];
 }
 
 export async function getCategoryPageList(
-  page = 1,
-  pageSize = 10,
-  name: string = ""
+	page = 1,
+	pageSize = 10,
+	name: string = "",
 ): Promise<PageResult<Category>> {
-  const list = await db
-    .select()
-    .from(category)
-    .where(name != "" ? like(category.name, "%" + name + "%") : undefined)
-    .limit(pageSize)
-    .offset((page - 1) * pageSize);
+	const list = await db
+		.select()
+		.from(category)
+		.where(name != "" ? like(category.name, "%" + name + "%") : undefined)
+		.limit(pageSize)
+		.offset((page - 1) * pageSize);
 
-  const totalResult = await db
-    .select({ value: count() })
-    .from(category)
-    .where(name != "" ? like(category.name, "%" + name + "%") : undefined);
-  let total = 0;
-  if (totalResult.length > 0) {
-    total = totalResult[0].value;
-  }
+	const totalResult = await db
+		.select({ value: count() })
+		.from(category)
+		.where(name != "" ? like(category.name, "%" + name + "%") : undefined);
+	let total = 0;
+	if (totalResult.length > 0) {
+		total = totalResult[0].value;
+	}
 
-  return {
-    list,
-    total,
-  };
+	return {
+		list,
+		total,
+	};
 }
 
 export async function saveCategory(
-  id: number | undefined,
-  name: string,
-  key: string
+	id: number | undefined,
+	name: string,
+	key: string,
 ) {
-  if (id) {
-    await db.update(category).set({ name, key }).where(eq(category.id, id));
-  } else {
-    await db.insert(category).values({ name, key });
-  }
+	if (id) {
+		await db.update(category).set({ name, key }).where(eq(category.id, id));
+	} else {
+		await db.insert(category).values({ name, key });
+	}
 }
 
 export async function deleteCategory(id: number) {
-  await db.delete(category).where(eq(category.id, id));
+	await db.delete(category).where(eq(category.id, id));
 }

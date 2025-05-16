@@ -3,9 +3,9 @@ import "@/app/globals.css";
 import { Layout } from "@/components/layout";
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return <Layout>{children}</Layout>;
+	return <Layout>{children}</Layout>;
 }
