@@ -3,12 +3,10 @@ import { Button } from "@/components/ui/button";
 import {
 	Copy,
 	Download,
-	Scan,
 	AlertTriangle,
 	ChevronRight,
 	TriangleAlert,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
 	getRelatedResources,
@@ -16,9 +14,12 @@ import {
 } from "@/lib/db/queries/resource";
 import { ClientLink } from "@/components/client-link";
 import ClickboardButton from "@/components/clickboard-button";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { formatDate } from "@/utils";
-import { Resource } from "@/lib/db/schema";
+import type { Resource } from "@/lib/db/schema";
+import Image from "next/image";
+import { getCategoryByKey } from "@/lib/db/queries/category";
+import { cn } from "@/lib/utils";
 
 // export const generateMetadata = async ({
 //   params,
@@ -40,6 +41,32 @@ import { Resource } from "@/lib/db/schema";
 //   };
 // };
 
+/**
+ * 根据磁盘类型返回对应的图标
+ */
+const getDiskTypeIcon = (diskType: string) => {
+	switch (diskType?.toLowerCase()) {
+		case "百度":
+			return <Image
+				src="/baidu_icon.svg"
+				alt="百度"
+				width={40}
+				height={40}
+				className="inline-block"
+			/>;
+		case "夸克":
+			return <Image
+				src="/quark_icon.svg"
+				alt="夸克"
+				width={80}
+				height={80}
+				className="inline-block"
+			/>;
+		default:
+			return null;
+	}
+};
+
 export async function generateMetadata({
 	params,
 }: {
@@ -48,9 +75,8 @@ export async function generateMetadata({
 	const name = (await params).name;
 	const resource = await getResourceByPinyin(name);
 	return {
-		title: `${resource?.title || ""}${
-			resource?.diskType || ""
-		}网盘资源下载 - 盘小子`,
+		title: `${resource?.title || ""}${resource?.diskType || ""
+			}网盘资源下载 - 盘小子`,
 		description:
 			resource?.desc ||
 			"盘小子是一个一站式网盘资源搜索引擎，支持夸克网盘、百度网盘、阿里云盘等多平台，快速精准搜索，一键直达",
@@ -65,8 +91,8 @@ export default async function ResourcePage({
 	const name = (await params).name;
 	const resource = await getResourceByPinyin(name);
 	let relatedResources: Resource[] = [];
-	if (resource && resource?.title) {
-		relatedResources = await getRelatedResources(resource?.title as string);
+	if (resource?.title) {
+		relatedResources = await getRelatedResources(resource.title);
 	}
 
 	if (!resource) {
@@ -76,6 +102,7 @@ export default async function ResourcePage({
 			</div>
 		);
 	}
+	const category = await getCategoryByKey(resource.categoryKey);
 
 	return (
 		<div className="container mx-auto py-6 text-base">
@@ -88,35 +115,42 @@ export default async function ResourcePage({
 					资源
 				</Link>
 				<ChevronRight className="h-4 w-4 mx-1" />
-				<Link href="#" className="hover:underline">
-					{resource.diskType}
+				<Link href={`/resource?category=${resource.categoryKey}`} className="hover:underline">
+					{category?.name}
 				</Link>
 				<ChevronRight className="h-4 w-4 mx-1" />
 				<span className="text-foreground">{resource.title}</span>
 			</div>
 
-			<div className="bg-card rounded-lg p-6 mb-6 shadow-sm">
-				<h1 className="flex justify-center text-2xl font-bold text-center mb-8">
-					<Badge
-						variant="outline"
-						className="mr-2 bg-blue-50 text-blue-600 border-blue-200"
-					>
-						<span>{resource.diskType}</span>
-					</Badge>
-					<p className="text-xl">{resource.title}</p>
-				</h1>
+			<div className="bg-card rounded-lg mb-6 shadow-sm flex flex-col items-center md:flex-row md:items-start gap-6">
+				{resource.cover && (<div className="min-w-[160px]">
+					<Image
+						src={resource.cover}
+						alt={resource.title}
+						width={160}
+						height={100}
+						className="max-w-fit h-auto object-cover rounded-md"
+						priority
+					/>
+				</div>
+				)}
+				<div className="flex-1">
+					<h1 className={cn("text-2xl font-bold mb-6", resource.cover ? "text-left" : " text-center")}>
+						{resource.title}
+					</h1>
 
-				<div className="space-y-4">
-					<div className="flex flex-col">
-						<span className="font-medium mb-2">资源描述:</span>
-						<p className="text-muted-foreground">{resource.desc}</p>
-					</div>
+					<div className="space-y-4">
+						<div className="flex flex-col">
+							<span className="font-medium mb-2">资源描述:</span>
+							<p className="text-muted-foreground">{resource.desc}</p>
+						</div>
 
-					<div className="flex items-center">
-						<span className="font-medium mr-2">更新时间:</span>
-						<span className="text-muted-foreground">
-							{resource.updatedAt ? formatDate(resource.updatedAt) : "未知"}
-						</span>
+						<div className="flex items-center">
+							<span className="font-medium mr-2">更新时间:</span>
+							<span className="text-muted-foreground">
+								{resource.updatedAt ? formatDate(resource.updatedAt) : "未知"}
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -129,33 +163,50 @@ export default async function ResourcePage({
 				</AlertDescription>
 			</Alert>
 
-			<div className="bg-card rounded-lg p-6 mb-6 shadow-sm">
-				<div className="flex items-center mb-4">
-					<span className="font-medium">资源地址:</span>
-					<div className="ml-2 flex flex-wrap gap-2">
-						<ClientLink
-							url={resource.url}
-							variant="outline"
-							className="flex items-center gap-1 text-blue-600"
-						>
-							<Download className="h-4 w-4" />
-							点击获取
-						</ClientLink>
-						<ClickboardButton
-							variant="outline"
-							className="flex items-center gap-1"
-							text={resource.url}
-						>
-							<Copy className="h-4 w-4" />
-							复制
-						</ClickboardButton>
-						<Button
-							variant="outline"
-							className="flex items-center gap-1 text-red-500"
-						>
-							<TriangleAlert className="h-4 w-4" />
-							失效反馈
-						</Button>
+			<div className="bg-card rounded-lg p-1 md:p-6 mb-6 shadow-sm">
+				<div className="flex flex-col md:flex-row items-start mb-4">
+					<span className="text-base md:mr-2 my-2">资源地址:</span>
+					<div className="flex flex-col gap-2">
+						{resource.diskList.map((item) => {
+							const itemDiskIcon = getDiskTypeIcon(item.diskType);
+							return (
+								<div
+									key={item.id}
+									className="flex items-center flex-wrap gap-1"
+								>
+									<span className="text-sm mr-2 flex items-center">
+										{itemDiskIcon}
+										{/* {item.diskType} */}
+									</span>
+									<ClientLink
+										url={item.url}
+										variant="outline"
+										size="sm"
+										className="flex items-center gap-1 text-blue-600"
+									>
+										<Download className="h-4 w-4" />
+										点击获取
+									</ClientLink>
+									<ClickboardButton
+										variant="outline"
+										size="sm"
+										className="flex items-center gap-1"
+										text={resource.url}
+									>
+										<Copy className="h-4 w-4" />
+										复制
+									</ClickboardButton>
+									<Button
+										variant="outline"
+										size="sm"
+										className="flex items-center gap-1 text-red-500"
+									>
+										<TriangleAlert className="h-4 w-4" />
+										失效
+									</Button>
+								</div>
+							);
+						})}
 					</div>
 				</div>
 			</div>

@@ -2,11 +2,17 @@ import { Resource } from "@/lib/db/schema";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 import { formatDate } from "@/utils";
+import { getCategoryList } from "@/lib/db/queries/category";
+import Image from "next/image";
+
 interface SearchResultsProps {
 	list: Resource[];
 }
 
 export default async function SearchResults({ list }: SearchResultsProps) {
+	const categories = await getCategoryList();
+	const categoryMap = new Map(categories.map((category) => [category.key, category.name]));
+
 	return (
 		<div className="space-y-6 text-base">
 			{list.length === 0 ? (
@@ -17,12 +23,21 @@ export default async function SearchResults({ list }: SearchResultsProps) {
 				list.map((result) => (
 					<div
 						key={result.id}
-						className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+						className="border rounded-lg p-4 hover:shadow-md transition-shadow flex gap-2"
 					>
+						{result.cover && (
+							<Image
+								src={result.cover}
+								alt={result.title}
+								width={120}
+								height={80}
+								className="object-cover rounded-md"
+							/>
+						)}
 						<Link href={`/resource/${result.pinyin}`} className="block">
 							<div className="flex items-center gap-2">
 								<Badge variant="outline" className="text-blue-600 bg-blue-50">
-									{result.diskType}
+									{categoryMap.get(result.categoryKey)}
 								</Badge>
 								<h2 className="hover:underline">{result.title}</h2>
 							</div>

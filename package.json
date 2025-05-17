@@ -11,6 +11,7 @@
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",
 		"create-admin": "tsx src/scripts/create-admin.ts",
+		"migrate-resource-disk": "tsx src/scripts/migrate-resource-disk.ts",
 		"format": "biome format --write ./src"
 	},
 	"dependencies": {

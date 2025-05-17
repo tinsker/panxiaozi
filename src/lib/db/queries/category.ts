@@ -1,7 +1,7 @@
 import { db } from "@/lib/db/index";
 import { category, type Category } from "@/lib/db/schema";
-import { PageResult } from "@/types";
-import { like, eq, and, count, desc } from "drizzle-orm";
+import type { PageResult } from "@/types";
+import { like, eq, count } from "drizzle-orm";
 // 获取所有分类
 export async function getCategoryList(): Promise<Category[]> {
 	return await db.select().from(category);
@@ -18,19 +18,19 @@ export async function getCategoryByKey(key: string): Promise<Category> {
 export async function getCategoryPageList(
 	page = 1,
 	pageSize = 10,
-	name: string = "",
+	name = "",
 ): Promise<PageResult<Category>> {
 	const list = await db
 		.select()
 		.from(category)
-		.where(name != "" ? like(category.name, "%" + name + "%") : undefined)
+		.where(name !== "" ? like(category.name, `%${name}%`) : undefined)
 		.limit(pageSize)
 		.offset((page - 1) * pageSize);
 
 	const totalResult = await db
 		.select({ value: count() })
 		.from(category)
-		.where(name != "" ? like(category.name, "%" + name + "%") : undefined);
+		.where(name !== "" ? like(category.name, `%${name}%`) : undefined);
 	let total = 0;
 	if (totalResult.length > 0) {
 		total = totalResult[0].value;

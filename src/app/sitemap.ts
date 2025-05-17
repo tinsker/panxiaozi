@@ -1,6 +1,5 @@
-import { getCategoryList } from "@/lib/db/queries/category";
 import { getAllResource } from "@/lib/db/queries/resource";
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 
 export const revalidate = 300;
 

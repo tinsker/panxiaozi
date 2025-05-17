@@ -1,7 +1,12 @@
 import { and, count, desc, eq, like, or } from "drizzle-orm";
 import { db } from "../index";
-import { Resource, resource } from "../schema";
-import { PageResult } from "@/types";
+import {
+	type Resource,
+	resource,
+	type ResourceDisk,
+	resourceDisk,
+} from "../schema";
+import type { PageResult } from "@/types";
 
 // 获取首页资源信息
 export async function getHomeResource(): Promise<Resource[]> {
@@ -27,16 +32,16 @@ export async function getResourceCount(): Promise<number> {
 export async function getResourcePageList(
 	page = 1,
 	pageSize = 10,
-	query: string = "",
-	category: string = "",
+	query = "",
+	category = "",
 ): Promise<PageResult<Resource>> {
 	const list = await db
 		.select()
 		.from(resource)
 		.where(
 			and(
-				query != "" ? like(resource.title, "%" + query + "%") : undefined,
-				category != "" ? eq(resource.categoryKey, category) : undefined,
+				query !== "" ? like(resource.title, `%${query}%`) : undefined,
+				category !== "" ? eq(resource.categoryKey, category) : undefined,
 			),
 		)
 		.orderBy(desc(resource.updatedAt), desc(resource.id))
@@ -48,8 +53,8 @@ export async function getResourcePageList(
 		.from(resource)
 		.where(
 			and(
-				query != "" ? like(resource.title, query) : undefined,
-				category != "" ? eq(resource.categoryKey, category) : undefined,
+				query !== "" ? like(resource.title, query) : undefined,
+				category !== "" ? eq(resource.categoryKey, category) : undefined,
 			),
 		);
 	let total = 0;
@@ -116,16 +121,21 @@ export async function deleteResource(id: number) {
 
 export async function getResourceByPinyin(
 	name: string,
-): Promise<Resource | null> {
+): Promise<(Resource & { diskList: ResourceDisk[] }) | null> {
 	const list = await db
 		.select()
 		.from(resource)
 		.where(eq(resource.pinyin, name))
 		.limit(1);
-	if (list.length == 0) {
+	if (list.length === 0) {
 		return null;
 	}
-	return list[0];
+	// 获取资源对应的网盘信息
+	const diskList = await db
+		.select()
+		.from(resourceDisk)
+		.where(eq(resourceDisk.resourceId, list[0].id));
+	return { ...list[0], diskList };
 }
 
 export async function getRelatedResources(title: string): Promise<Resource[]> {

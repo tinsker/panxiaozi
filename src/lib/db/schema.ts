@@ -7,6 +7,7 @@ import {
 	index,
 	tinyint,
 	unique,
+	text,
 } from "drizzle-orm/mysql-core";
 
 // 分类表定义
@@ -23,7 +24,8 @@ export const resource = mysqlTable(
 		categoryKey: varchar("category_key", { length: 100 }).notNull(),
 		pinyin: varchar("pinyin", { length: 2000 }).notNull().default(""),
 		title: varchar("title", { length: 255 }).notNull(),
-		desc: varchar("desc", { length: 100 }).notNull(),
+		desc: text("desc").notNull(),
+		cover: varchar("cover", { length: 1000 }).notNull().default(""),
 		diskType: varchar("disk_type", { length: 10 }).notNull(), // 网盘类型
 		url: varchar("url", { length: 1000 }).notNull(), // 资源地址
 		hotNum: int("hot_num").notNull().default(0), // 热度，添加索引
@@ -43,9 +45,25 @@ export const user = mysqlTable("user", {
 	createdAt: datetime("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const resourceDisk = mysqlTable(
+	"resource_disk",
+	{
+		id: int("id").autoincrement().primaryKey().notNull(),
+		resourceId: int("resource_id").notNull(),
+		diskType: varchar("disk_type", { length: 10 }).notNull(),
+		externalUrl: varchar("external_url", { length: 1000 }).notNull(),
+		url: varchar("url", { length: 1000 }).notNull(),
+		updatedAt: datetime("updated_at").default(sql`CURRENT_TIMESTAMP`),
+	},
+	(table) => [index("idx_resource_id").on(table.resourceId)],
+);
+
 // 导出类型定义，方便在应用中使用
 export type Category = typeof category.$inferSelect;
 export type NewCategory = typeof category.$inferInsert;
 
 export type Resource = typeof resource.$inferSelect;
 export type User = typeof user.$inferSelect;
+
+export type ResourceDisk = typeof resourceDisk.$inferSelect;
+export type NewResourceDisk = typeof resourceDisk.$inferInsert;
