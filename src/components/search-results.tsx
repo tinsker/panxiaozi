@@ -14,7 +14,7 @@ export default async function SearchResults({ list }: SearchResultsProps) {
 	const categoryMap = new Map(categories.map((category) => [category.key, category.name]));
 
 	return (
-		<div className="space-y-6 text-base">
+		<div className="space-y-2 text-base">
 			{list.length === 0 ? (
 				<div className="text-center py-12">
 					<p className="text-gray-500">没有找到相关结果</p>
