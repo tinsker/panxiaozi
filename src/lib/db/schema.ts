@@ -52,7 +52,7 @@ export const resourceDisk = mysqlTable(
 		resourceId: int("resource_id").notNull(),
 		diskType: varchar("disk_type", { length: 10 }).notNull(),
 		externalUrl: varchar("external_url", { length: 1000 }).notNull(),
-		url: varchar("url", { length: 1000 }).notNull(),
+		url: varchar("url", { length: 1000 }).notNull().default(""),
 		updatedAt: datetime("updated_at").default(sql`CURRENT_TIMESTAMP`),
 	},
 	(table) => [index("idx_resource_id").on(table.resourceId)],

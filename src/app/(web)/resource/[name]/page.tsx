@@ -179,7 +179,11 @@ export default async function ResourcePage({
 										{/* {item.diskType} */}
 									</span>
 									<ClientLink
+										id={item.id}
+										title={resource.title}
+										categoryKey={resource.categoryKey}
 										url={item.url}
+										externalUrl={item.externalUrl}
 										variant="outline"
 										size="sm"
 										className="flex items-center gap-1 text-blue-600"
@@ -187,15 +191,15 @@ export default async function ResourcePage({
 										<Download className="h-4 w-4" />
 										点击获取
 									</ClientLink>
-									<ClickboardButton
+									{item.url && <ClickboardButton
 										variant="outline"
 										size="sm"
 										className="flex items-center gap-1"
-										text={resource.url}
+										text={item.url}
 									>
 										<Copy className="h-4 w-4" />
 										复制
-									</ClickboardButton>
+									</ClickboardButton>}
 									<Button
 										variant="outline"
 										size="sm"
