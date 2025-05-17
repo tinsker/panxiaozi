@@ -122,7 +122,7 @@ export default async function ResourcePage({
 				<span className="text-foreground">{resource.title}</span>
 			</div>
 
-			<div className="bg-card rounded-lg mb-6 shadow-sm flex flex-col items-center md:flex-row md:items-start gap-6">
+			<div className="rounded-lg mb-6 flex flex-col items-center md:flex-row md:items-start gap-6 p-1">
 				{resource.cover && (<div className="min-w-[160px]">
 					<Image
 						src={resource.cover}
