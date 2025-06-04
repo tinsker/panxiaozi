@@ -17,6 +17,9 @@ export const metadata: Metadata = {
 	alternates: {
 		canonical: "./",
 	},
+	icons: {
+		icon: "/favicon.ico",
+	},
 	openGraph: {
 		title: "盘小子 - 免费网盘资源搜索引擎 | 一站式网盘搜索平台",
 		description:
