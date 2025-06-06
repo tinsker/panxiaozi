@@ -73,11 +73,27 @@ export async function getResourcePageList(
 async function getHotResourceCore(): Promise<string[]> {
 	let list: string[] = []
 	try {
-		const res = await fetch(process.env.HOT_MOVIE_API || "")
+		// 构造请求参数
+		const date = new Date()
+		date.setDate(date.getDate() - 1)
+		const dateStr = date.toISOString().split("T")[0]
+		const params = new URLSearchParams({
+			type: "DAILY",
+			category: "NETWORK_DRAMA",
+			date: dateStr,
+			attach: "gdi",
+			orderTitle: "gdi",
+			platformId: "0"
+		})
+		const url = `${process.env.HOT_MOVIE_API}?${params.toString()}`
+		const res = await fetch(url)
 		const result = await res.json()
 		list = result.data.map((item: any) => item.name)
 		if (list.length > 10) {
 			list = list.slice(0, 10)
+		}
+		if (list.length === 0) {
+			throw new Error("获取热门资源失败")
 		}
 	} catch (error) {
 		const result = await db
