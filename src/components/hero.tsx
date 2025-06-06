@@ -33,14 +33,14 @@ export async function Hero() {
 								{hotResources.map((item, index) => (
 									<li key={index}>
 										<Link
-											href={`/resource?q=${item.title}`}
+											href={`/resource?q=${item}`}
 											className="flex items-center gap-2 group"
 										>
 											<span className="text-xs block text-orange-500 font-bold min-w-5">
 												{index + 1}
 											</span>
 											<span className="text-sm group-hover:text-blue-500 text-gray-700 line-clamp-1">
-												{item.title}
+												{item}
 											</span>
 										</Link>
 									</li>

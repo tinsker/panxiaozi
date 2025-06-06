@@ -1,4 +1,5 @@
 import { and, count, desc, eq, like, or } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import { db } from "../index";
 import {
 	type Resource,
@@ -68,13 +69,36 @@ export async function getResourcePageList(
 	};
 }
 
-export async function getHotResource(): Promise<Resource[]> {
-	return await db
-		.select()
-		.from(resource)
-		.orderBy(desc(resource.hotNum), desc(resource.id))
-		.limit(10);
+// 获取热门资源的核心逻辑
+async function getHotResourceCore(): Promise<string[]> {
+	let list: string[] = []
+	try {
+		const res = await fetch(process.env.HOT_MOVIE_API || "")
+		const result = await res.json()
+		list = result.data.map((item: any) => item.name)
+		if (list.length > 10) {
+			list = list.slice(0, 10)
+		}
+	} catch (error) {
+		const result = await db
+			.select()
+			.from(resource)
+			.orderBy(desc(resource.hotNum), desc(resource.id))
+			.limit(10);
+		list = result.map(item => item.title)
+	}
+	return list
 }
+
+// 使用 Next.js 缓存包装的热门资源获取函数
+export const getHotResource = unstable_cache(
+	getHotResourceCore,
+	['hot-resource'],
+	{
+		revalidate: 30 * 60, // 30分钟缓存
+		tags: ['hot-resource']
+	}
+);
 
 export async function saveResource(
 	id: number | undefined,
@@ -154,3 +178,4 @@ export async function getRelatedResources(title: string): Promise<Resource[]> {
 
 	return list;
 }
+
