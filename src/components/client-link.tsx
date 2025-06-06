@@ -41,6 +41,21 @@ export function ClientLink({
 	const [loading, setLoading] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [successUrl, setSuccessUrl] = useState("");
+	const [isMobile, setIsMobile] = useState(false);
+
+	// 检测是否为移动端
+	useEffect(() => {
+		const checkMobile = () => {
+			const userAgent = navigator.userAgent;
+			const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+			setIsMobile(isMobileDevice);
+		};
+
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+
+		return () => window.removeEventListener('resize', checkMobile);
+	}, []);
 
 	const handleClick = async () => {
 		// 如果已有URL，直接显示二维码
@@ -107,22 +122,26 @@ export function ClientLink({
 						</div>
 					</div>
 					<DialogFooter className="sm:justify-between">
-						<Button
-							variant="secondary"
-							onClick={() => {
-								setDialogOpen(false);
-							}}
-						>
-							关闭
-						</Button>
-						<Button
-							onClick={() => {
-								window.open(successUrl, "_blank");
-								setDialogOpen(false);
-							}}
-						>
-							打开链接
-						</Button>
+						<div className="flex-1 flex flex-col gap-2">
+							<Button
+								variant="secondary"
+								onClick={() => {
+									setDialogOpen(false);
+								}}
+							>
+								关闭
+							</Button>
+							{isMobile && (
+								<Button
+									onClick={() => {
+										window.open(successUrl, "_blank");
+										setDialogOpen(false);
+									}}
+								>
+									打开链接
+								</Button>
+							)}
+						</div>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
