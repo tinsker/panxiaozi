@@ -73,10 +73,11 @@ export async function getResourcePageList(
 async function getHotResourceCore(): Promise<string[]> {
 	let list: string[] = []
 	try {
+		const configDayUrl = `${process.env.HOT_MOVIE_DAY_API}`
+		const configDay = await fetch(configDayUrl)
+		const configDayResult = await configDay.json()
+		const dateStr = configDayResult.data.DAILY.endDay
 		// 构造请求参数
-		const date = new Date()
-		date.setDate(date.getDate() - 1)
-		const dateStr = date.toISOString().split("T")[0]
 		const params = new URLSearchParams({
 			type: "DAILY",
 			category: "NETWORK_DRAMA",
@@ -96,6 +97,7 @@ async function getHotResourceCore(): Promise<string[]> {
 			throw new Error("获取热门资源失败")
 		}
 	} catch (error) {
+		console.error(error)
 		const result = await db
 			.select()
 			.from(resource)
