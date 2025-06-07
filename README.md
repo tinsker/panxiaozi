@@ -107,6 +107,9 @@ JWT_SECRET=your-jwt-secret
 
 [![Deployed on Zeabur](https://zeabur.com/deployed-on-zeabur-dark.svg)](https://zeabur.com/referral?referralCode=towelong&utm_source=towelong&utm_campaign=oss)
 
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
+
+
 ## 许可证
 
 [MIT](LICENSE)
