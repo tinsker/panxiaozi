@@ -1,19 +1,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useSafeSearchParams } from "@/hooks/use-safe-search-params";
 
 export default function SearchForm({ initialQuery = "", path = "" }) {
 	const [searchQuery, setSearchQuery] = useState(initialQuery);
+	const [mounted, setMounted] = useState(false);
 	const router = useRouter();
 	let pathname = usePathname();
-	const searchParams = useSearchParams();
+	const searchParams = useSafeSearchParams();
+
+	// 确保组件已挂载
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	const handleSearch = () => {
 		// 创建新的URLSearchParams对象
-		const params = new URLSearchParams(searchParams.toString());
+		const params = new URLSearchParams(mounted ? searchParams.toString() : "");
 
 		// 设置搜索查询参数
 		params.set("q", searchQuery);
@@ -37,11 +44,25 @@ export default function SearchForm({ initialQuery = "", path = "" }) {
 		}
 	};
 
-	// 当URL参数中的q值变化时更新搜索框
+	// 当URL参数变化时更新搜索框
 	useEffect(() => {
-		const query = searchParams.get("q") || "";
-		setSearchQuery(query);
-	}, [searchParams]);
+		if (mounted) {
+			const query = searchParams.get("q") || "";
+			setSearchQuery(query);
+		}
+	}, [searchParams, mounted]);
+
+	// 监听URL变化
+	useEffect(() => {
+		const handleUrlChange = () => {
+			const params = new URLSearchParams(window.location.search);
+			const query = params.get("q") || "";
+			setSearchQuery(query);
+		};
+
+		window.addEventListener('popstate', handleUrlChange);
+		return () => window.removeEventListener('popstate', handleUrlChange);
+	}, []);
 
 	return (
 		<div className="flex gap-2 justify-center">

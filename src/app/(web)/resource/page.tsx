@@ -78,9 +78,7 @@ export default async function SearchPage({
 					<SearchResults list={data.list} />
 					{totalPages > 0 && (
 						<div className="mt-8">
-							<Suspense fallback={<div>加载中...</div>}>
-								<Pagination currentPage={page} totalPages={totalPages} />
-							</Suspense>
+							<Pagination currentPage={page} totalPages={totalPages} />
 						</div>
 					)}
 				</div>

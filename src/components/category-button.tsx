@@ -2,8 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Category } from "@/lib/db/schema";
+import { useSafeSearchParams } from "@/hooks/use-safe-search-params";
 
 interface CategoryButtonProps {
 	category: Category;
@@ -11,7 +12,7 @@ interface CategoryButtonProps {
 
 export default function CategoryButton({ category }: CategoryButtonProps) {
 	const router = useRouter();
-	const searchParams = useSearchParams();
+	const searchParams = useSafeSearchParams();
 	const currentCategory = searchParams.get("category");
 
 	const isActive =

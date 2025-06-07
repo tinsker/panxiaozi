@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
 	Pagination as ShadcnPagination,
 	PaginationContent,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/pagination";
 import { useScreen } from "usehooks-ts";
 import { useEffect, useState } from "react";
+import { useSafeSearchParams } from "@/hooks/use-safe-search-params";
 
 interface PaginationProps {
 	currentPage: number;
@@ -26,7 +27,7 @@ export default function Pagination({
 	onPageChange,
 	...props
 }: PaginationProps) {
-	const searchParams = useSearchParams();
+	const searchParams = useSafeSearchParams();
 	const pathname = usePathname();
 	const router = useRouter();
 	const screen = useScreen();
