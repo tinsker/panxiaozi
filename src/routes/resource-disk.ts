@@ -26,6 +26,8 @@ app.post("/update", zValidator("json", updateSchema), async (c) => {
   }
   const category = await getCategoryByKey(categoryKey);
   const quarkApi = process.env.QUARK_API;
+  // title合法化
+  let newTitle = title.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '');
   const response = await fetch(`${quarkApi}/transfer`, {
     method: 'POST',
     headers: {
@@ -33,7 +35,7 @@ app.post("/update", zValidator("json", updateSchema), async (c) => {
     },
     body: JSON.stringify({
       share_url: externalUrl,
-      save_path: `/${category.name}/${title}`,
+      save_path: `/${category.name}/${newTitle}`,
       gen_passcode: false,
       expire_days: 1
     }),
