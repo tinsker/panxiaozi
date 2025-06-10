@@ -38,13 +38,13 @@ export default async function SearchResults({ list }: SearchResultsProps) {
 						)}
 						<div className="flex-1 min-w-0">
 							<Link href={`/resource/${result.pinyin}`} className="block">
-								<div className="flex items-center gap-2 flex-wrap">
+								<div className="flex items-center gap-2">
 									<Badge variant="outline" className="text-blue-600 bg-blue-50">
 										{categoryMap.get(result.categoryKey)}
 									</Badge>
-									<h2 className="hover:underline">{result.title}</h2>
+									<h2 className="hover:underline truncate sm:whitespace-normal w-28 sm:w-auto">{result.title}</h2>
 								</div>
-								<p className="mt-2 text-gray-600 text-sm">{result.desc.length > 100 ? result.desc.slice(0, 100) + "..." : result.desc}</p>
+								<p className="mt-2 text-gray-600 text-sm line-clamp-[7] sm:line-clamp-none">{result.desc}</p>
 								<p className="mt-2 text-gray-600 text-sm">
 									更新时间：
 									{result.updatedAt ? formatDate(result.updatedAt) : "未知"}
