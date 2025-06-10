@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Button } from "./ui/button";
 
 const navItems = [
 	{ label: "首页", href: "/" },
@@ -12,6 +14,15 @@ const navItems = [
 
 export function Header() {
 	const pathname = usePathname();
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+	const toggleMobileMenu = () => {
+		setIsMobileMenuOpen(!isMobileMenuOpen);
+	};
+
+	const closeMobileMenu = () => {
+		setIsMobileMenuOpen(false);
+	};
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -32,11 +43,10 @@ export function Header() {
 									<li key={item.href}>
 										<Link
 											href={item.href}
-											className={`text-sm font-medium ${
-												isActive
-													? "text-blue-500 font-semibold"
-													: "text-gray-600 hover:text-blue-500"
-											}`}
+											className={`text-sm font-medium ${isActive
+												? "text-blue-500 font-semibold"
+												: "text-gray-600 hover:text-blue-500"
+												}`}
 										>
 											{item.label}
 										</Link>
@@ -53,8 +63,62 @@ export function Header() {
           <div className="rounded-full bg-gray-100 p-1">
             <span className="text-xs">用户</span>
           </div> */}
+					<Button
+						variant="ghost"
+						size="sm"
+						className="md:hidden"
+						onClick={toggleMobileMenu}
+						aria-label="切换菜单"
+					>
+						<svg
+							className="h-6 w-6"
+							fill="none"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							{isMobileMenuOpen ? (
+								<path d="M6 18L18 6M6 6l12 12" />
+							) : (
+								<path d="M4 6h16M4 12h16M4 18h16" />
+							)}
+						</svg>
+					</Button>
 				</div>
 			</div>
+
+			{isMobileMenuOpen && (
+				<div className="md:hidden border-t bg-white">
+					<div className="container py-4">
+						<nav>
+							<ul className="space-y-3">
+								{navItems.map((item) => {
+									const isActive =
+										pathname === item.href ||
+										(item.href !== "/" && pathname?.startsWith(item.href));
+
+									return (
+										<li key={item.href}>
+											<Link
+												href={item.href}
+												className={`block text-base font-medium py-2 ${isActive
+													? "text-blue-500 font-semibold"
+													: "text-gray-600 hover:text-blue-500"
+													}`}
+												onClick={closeMobileMenu}
+											>
+												{item.label}
+											</Link>
+										</li>
+									);
+								})}
+							</ul>
+						</nav>
+					</div>
+				</div>
+			)}
 		</header>
 	);
 }
