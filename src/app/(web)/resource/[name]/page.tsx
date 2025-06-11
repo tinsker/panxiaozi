@@ -119,7 +119,7 @@ export default async function ResourcePage({
 					{category?.name}
 				</Link>
 				<ChevronRight className="h-4 w-4 mx-1" />
-				<span className="text-foreground">{resource.title}</span>
+				<span className="text-foreground truncate sm:whitespace-normal w-48 sm:w-auto">{resource.title}</span>
 			</div>
 
 			<div className="rounded-lg mb-6 flex flex-col items-center md:flex-row md:items-start gap-6 p-1">

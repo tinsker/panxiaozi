@@ -35,7 +35,7 @@ app.post("/update", zValidator("json", updateSchema), async (c) => {
     },
     body: JSON.stringify({
       share_url: externalUrl,
-      save_path: `/${category.name}/${newTitle}`,
+      save_path: `/${category.name}`,
       gen_passcode: false,
       expire_days: 1
     }),
