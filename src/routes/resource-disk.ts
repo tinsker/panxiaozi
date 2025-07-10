@@ -3,6 +3,10 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { getResourceDiskUrl, updateResourceDiskUrl } from "@/lib/db/queries/resource-disk";
 import { getCategoryByKey } from "@/lib/db/queries/category";
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn' // 导入本地化语言
+
+dayjs.locale('zh-cn')
 
 // 定义请求体验证模式
 const updateSchema = z.object({
@@ -26,8 +30,6 @@ app.post("/update", zValidator("json", updateSchema), async (c) => {
   }
   const category = await getCategoryByKey(categoryKey);
   const quarkApi = process.env.QUARK_API;
-  // title合法化
-  let newTitle = title.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '');
   const response = await fetch(`${quarkApi}/transfer`, {
     method: 'POST',
     headers: {
@@ -47,6 +49,19 @@ app.post("/update", zValidator("json", updateSchema), async (c) => {
 
   const data = await response.json();
   console.log(data);
+  if (data.message.includes("capacity limit") && process.env.NOTICE_API) {
+    // 获取当前时间
+    const timeStr = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    await fetch(process.env.NOTICE_API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        msg: `告警：资源磁盘容量不足，请及时清理\n时间：${timeStr}`,
+      })
+    })
+  }
 
   const newUrl = data.share_url; // 获取转存后的URL
   await updateResourceDiskUrl(id, newUrl);
