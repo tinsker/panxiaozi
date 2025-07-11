@@ -3,10 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { getResourceDiskUrl, updateResourceDiskUrl } from "@/lib/db/queries/resource-disk";
 import { getCategoryByKey } from "@/lib/db/queries/category";
-import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn' // 导入本地化语言
-
-dayjs.locale('zh-cn')
+import { notice } from "@/utils/notice";
 
 // 定义请求体验证模式
 const updateSchema = z.object({
@@ -42,25 +39,16 @@ app.post("/update", zValidator("json", updateSchema), async (c) => {
       expire_days: 1
     }),
   });
-
   if (!response.ok) {
+    const errorText = await response.text();
+    await notice(`告警：资源磁盘转存失败\nhttp状态码：${response.status}\n响应体：${errorText}`);
     throw new Error('转存失败');
   }
 
   const data = await response.json();
   console.log(data);
-  if (data.message.includes("capacity limit") && process.env.NOTICE_API) {
-    // 获取当前时间
-    const timeStr = dayjs().format('YYYY-MM-DD HH:mm:ss');
-    await fetch(process.env.NOTICE_API, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        msg: `告警：资源磁盘容量不足，请及时清理\n时间：${timeStr}`,
-      })
-    })
+  if (data.message?.includes("capacity limit")) {
+    await notice("告警：资源磁盘容量不足，请及时清理");
   }
 
   const newUrl = data.share_url; // 获取转存后的URL

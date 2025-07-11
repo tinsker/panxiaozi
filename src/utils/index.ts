@@ -4,7 +4,7 @@ export const getTotalPages = (total: number, pageSize: number) => {
 		if (!Number.isInteger(totalPages)) {
 			totalPages = Math.ceil(totalPages);
 		} else {
-			totalPages = Number.parseInt(totalPages + "", 10);
+			totalPages = Number.parseInt(`${totalPages}`, 10);
 		}
 	}
 	return totalPages;
@@ -19,9 +19,9 @@ export const formatDate = (date: Date) => {
 };
 
 // 文本超过省略
-export const ellipsisText = (text: string, maxLength: number = 10) => {
+export const ellipsisText = (text: string, maxLength = 10) => {
 	if (text.length <= maxLength) {
 		return text;
 	}
-	return text.slice(0, maxLength) + "...";
+	return `${text.slice(0, maxLength)}...`;
 };
