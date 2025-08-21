@@ -5,6 +5,10 @@ import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport = {
+  themeColor: "#ffffff",
+};
+
 export const metadata: Metadata = {
   title: "盘小子 - 免费网盘资源搜索引擎 | 一站式网盘搜索平台",
   description:
@@ -53,14 +57,17 @@ export default function RootLayout({
       <head>
         <meta name="application-name" content="盘小子" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="light-content"
+        />
         <meta name="apple-mobile-web-app-title" content="盘小子" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="msapplication-TileColor" content="#3B82F6" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#ffffff" />
 
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link
