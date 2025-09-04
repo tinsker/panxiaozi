@@ -78,7 +78,11 @@ export default async function ResourcePage({
   const resource = await getResourceByPinyin(name);
   let relatedResources: Resource[] = [];
   if (resource?.title) {
-    relatedResources = await getRelatedResources(resource.title);
+    relatedResources = await getRelatedResources(
+      resource.title,
+      resource.categoryKey,
+      resource.id,
+    );
   }
 
   if (!resource) {
