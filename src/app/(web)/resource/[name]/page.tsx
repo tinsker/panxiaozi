@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import { formatDate } from "@/utils";
 import type { Resource } from "@/lib/db/schema";
 import Image from "next/image";
+import { ImagePreview } from "@/components/image-preview";
 import { getCategoryByKey } from "@/lib/db/queries/category";
 import { cn } from "@/lib/utils";
 import { WechatQRModal } from "@/components/wechat-qr-modal";
@@ -120,13 +121,10 @@ export default async function ResourcePage({
       <div className="rounded-lg mb-6 flex flex-col items-center md:flex-row md:items-start gap-6 p-1">
         {resource.cover && (
           <div className="min-w-[160px]">
-            <Image
+            <ImagePreview
               src={resource.cover}
               alt={resource.title}
-              width={160}
-              height={100}
-              className="max-w-fit h-auto object-cover rounded-md"
-              priority
+              className="w-[160px] h-auto object-cover rounded-md"
             />
           </div>
         )}
