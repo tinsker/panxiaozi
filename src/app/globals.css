@@ -126,3 +126,17 @@
 .nav-item-active {
 	@apply text-blue-600 font-medium;
 }
+
+/* Utilities: line clamp without Tailwind plugin */
+@layer utilities {
+  .line-clamp-7 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+    overflow: hidden;
+  }
+  .line-clamp-none {
+    display: block;
+    -webkit-line-clamp: initial;
+  }
+}
