@@ -96,23 +96,23 @@ export default async function ResourcePage({
 
   return (
     <div className="container mx-auto py-6 text-base">
-      <div className="flex items-center text-sm text-muted-foreground mb-4">
-        <Link href="/" className="hover:underline">
+      <div className="flex items-center text-sm text-muted-foreground mb-4 overflow-hidden flex-nowrap">
+        <Link href="/" className="hover:underline whitespace-nowrap shrink-0">
           首页
         </Link>
         <ChevronRight className="h-4 w-4 mx-1" />
-        <Link href="/resource" className="hover:underline">
+        <Link href="/resource" className="hover:underline whitespace-nowrap shrink-0">
           资源
         </Link>
         <ChevronRight className="h-4 w-4 mx-1" />
         <Link
           href={`/resource?category=${resource.categoryKey}`}
-          className="hover:underline"
+          className="hover:underline whitespace-nowrap shrink-0"
         >
           {category?.name}
         </Link>
         <ChevronRight className="h-4 w-4 mx-1" />
-        <span className="text-foreground truncate sm:whitespace-normal w-48 sm:w-auto">
+        <span className="text-foreground truncate min-w-0 flex-1">
           {resource.title}
         </span>
       </div>
