@@ -141,7 +141,9 @@ export default async function ResourcePage({
           <div className="space-y-4">
             <div className="flex flex-col">
               <span className="font-medium mb-2">资源描述:</span>
-              <p className="text-muted-foreground">{resource.desc}</p>
+              <p className="text-muted-foreground break-all md:break-words whitespace-pre-line">
+                {resource.desc}
+              </p>
             </div>
 
             <div className="flex items-center">
