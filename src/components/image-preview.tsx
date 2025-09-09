@@ -47,7 +47,7 @@ export function ImagePreview({ src, alt, className }: ImagePreviewProps) {
 
           {/* 可点击关闭的全屏层（图片外区域） */}
           <DialogClose asChild>
-            <div className="absolute inset-0" aria-hidden="true" />
+            <div className="absolute inset-0 cursor-zoom-out" aria-hidden="true" />
           </DialogClose>
 
           {/* 关闭按钮：固定在视口右上角，不遮挡图片 */}
@@ -58,14 +58,16 @@ export function ImagePreview({ src, alt, className }: ImagePreviewProps) {
             <X className="h-4 w-4" />
           </DialogClose>
 
-          {/* 预览区域（点击图片不关闭；点击图片外区域关闭）*/}
-          <div className="relative z-10 flex items-center justify-center w-full h-full">
+          {/* 预览区域：允许事件穿透到蒙层以实现点击关闭 */}
+          <div className="relative z-10 flex items-center justify-center w-full h-full pointer-events-none">
             <div className="flex items-center justify-center w-[95vw] max-w-[1200px] h-[85vh]">
-              <img
-                src={src}
-                alt={alt}
-                className="max-w-full max-h-full object-contain rounded-md shadow-lg"
-              />
+              <DialogClose asChild>
+                <img
+                  src={src}
+                  alt={alt}
+                  className="max-w-full max-h-full object-contain rounded-md shadow-lg cursor-zoom-out pointer-events-auto"
+                />
+              </DialogClose>
             </div>
           </div>
         </DialogPrimitive.Content>

@@ -30,7 +30,7 @@ export default function SearchForm({ initialQuery = "", path = "" }) {
 			params.delete("page");
 		}
 
-		if (path != "") {
+		if (path !== "") {
 			pathname = path;
 		}
 
@@ -86,12 +86,13 @@ export default function SearchForm({ initialQuery = "", path = "" }) {
 						strokeLinecap="round"
 						strokeLinejoin="round"
 					>
-						<circle cx="11" cy="11" r="8"></circle>
-						<path d="m21 21-4.3-4.3"></path>
+						<title>Search icon</title>
+						<circle cx="11" cy="11" r="8" />
+						<path d="m21 21-4.3-4.3" />
 					</svg>
 				</div>
 			</div>
-			<Button onClick={handleSearch}>搜索</Button>
+			<Button onClick={handleSearch} className="dark:text-white">搜索</Button>
 		</div>
 	);
 }

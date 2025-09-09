@@ -52,40 +52,41 @@
 	}
 
 	.dark {
-		--background: 222.2 84% 4.9%;
-		--foreground: 210 40% 98%;
+		/* Brighter, softer dark palette */
+		--background: 222.2 16% 18%;
+		--foreground: 210 28% 97%;
 
-		--card: 222.2 84% 4.9%;
-		--card-foreground: 210 40% 98%;
+		--card: 222.2 14% 22%;
+		--card-foreground: 210 28% 97%;
 
-		--popover: 222.2 84% 4.9%;
-		--popover-foreground: 210 40% 98%;
+		--popover: 222.2 16% 18%;
+		--popover-foreground: 210 28% 97%;
 
 		--primary: 217.2 91.2% 59.8%;
 		--primary-foreground: 222.2 47.4% 11.2%;
 
-		--secondary: 217.2 32.6% 17.5%;
+		--secondary: 217.2 18% 30%;
 		--secondary-foreground: 210 40% 98%;
 
-		--muted: 217.2 32.6% 17.5%;
-		--muted-foreground: 215 20.2% 65.1%;
+		--muted: 217.2 18% 30%;
+		--muted-foreground: 215 16% 80%;
 
-		--accent: 217.2 32.6% 17.5%;
+		--accent: 217.2 18% 30%;
 		--accent-foreground: 210 40% 98%;
 
 		--destructive: 0 62.8% 30.6%;
 		--destructive-foreground: 210 40% 98%;
 
-		--border: 217.2 32.6% 17.5%;
-		--input: 217.2 32.6% 17.5%;
+		--border: 217.2 16% 36%;
+		--input: 217.2 16% 36%;
 		--ring: 224.3 76.3% 48%;
-		--sidebar-background: 240 5.9% 10%;
+		--sidebar-background: 222.2 14% 20%;
 		--sidebar-foreground: 240 4.8% 95.9%;
 		--sidebar-primary: 224.3 76.3% 48%;
 		--sidebar-primary-foreground: 0 0% 100%;
-		--sidebar-accent: 240 3.7% 15.9%;
+		--sidebar-accent: 240 3.7% 28%;
 		--sidebar-accent-foreground: 240 4.8% 95.9%;
-		--sidebar-border: 240 3.7% 15.9%;
+		--sidebar-border: 240 3.7% 28%;
 		--sidebar-ring: 217.2 91.2% 59.8%;
 	}
 }
@@ -106,20 +107,20 @@
 
 /* Tab styles */
 .tabs-list {
-	@apply rounded-lg bg-gray-100 p-1;
+	@apply rounded-lg bg-muted p-1;
 }
 
 .tab-trigger {
-	@apply rounded px-3 py-1.5 text-sm font-medium text-gray-600 transition-all hover:text-blue-600;
+	@apply rounded px-3 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:text-blue-600;
 }
 
 .tab-trigger[data-state="active"] {
-	@apply bg-white text-blue-600 shadow-sm;
+	@apply bg-background text-blue-600 shadow-sm;
 }
 
 /* Card hover effects */
 .card-hover {
-	@apply transition-all duration-200 hover:shadow-md hover:border-blue-200;
+	@apply transition-all duration-200 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800;
 }
 
 /* Nav item active state */

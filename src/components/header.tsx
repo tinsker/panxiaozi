@@ -5,6 +5,7 @@ import { Logo } from "./logo";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navItems = [
 	{ label: "首页", href: "/" },
@@ -25,7 +26,7 @@ export function Header() {
 	};
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b bg-white">
+		<header className="sticky top-0 z-50 w-full border-b bg-background">
 			<div className="container flex h-16 items-center justify-between">
 				<div className="flex items-center gap-6">
 					<Link href="/" className="flex items-center gap-2">
@@ -45,7 +46,7 @@ export function Header() {
 											href={item.href}
 											className={`text-sm font-medium ${isActive
 												? "text-blue-500 font-semibold"
-												: "text-gray-600 hover:text-blue-500"
+												: "text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
 												}`}
 										>
 											{item.label}
@@ -57,6 +58,8 @@ export function Header() {
 					</nav>
 				</div>
 				<div className="flex items-center gap-2">
+					{/* 主题切换：右侧按钮 */}
+					<ThemeToggle />
 					{/* <Button variant="outline" size="sm" className="hidden md:flex">
             登录/注册
           </Button>
@@ -90,7 +93,7 @@ export function Header() {
 			</div>
 
 			{isMobileMenuOpen && (
-				<div className="md:hidden border-t bg-white">
+				<div className="md:hidden border-t bg-background">
 					<div className="container py-4">
 						<nav>
 							<ul className="space-y-3">
@@ -103,9 +106,9 @@ export function Header() {
 										<li key={item.href}>
 											<Link
 												href={item.href}
-												className={`block text-base font-medium py-2 ${isActive
+											className={`block text-base font-medium py-2 ${isActive
 													? "text-blue-500 font-semibold"
-													: "text-gray-600 hover:text-blue-500"
+													: "text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
 													}`}
 												onClick={closeMobileMenu}
 											>

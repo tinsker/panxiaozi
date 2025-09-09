@@ -110,12 +110,12 @@ export async function ResourceList() {
 																<h3 className="font-medium text-base line-clamp-1">
 																	{ellipsisText(resource.title)}
 																</h3>
-																<span className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
-																	{resource.diskType}
-																</span>
+												<span className="text-xs px-2 py-1 bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 rounded-full">
+													{resource.diskType}
+												</span>
 															</div>
 
-															<div className="flex items-center gap-2 text-gray-500 text-xs">
+															<div className="flex items-center gap-2 text-muted-foreground text-xs">
 																<svg
 																	xmlns="http://www.w3.org/2000/svg"
 																	width="14"
@@ -140,7 +140,7 @@ export async function ResourceList() {
 
 															<div className="mt-2 flex justify-between items-center">
 																<div className="flex items-center gap-1">
-																	<div className="w-6 h-6 bg-blue-50 rounded-full flex items-center justify-center">
+																<div className="w-6 h-6 bg-blue-50 dark:bg-blue-950/20 rounded-full flex items-center justify-center">
 																		<svg
 																			xmlns="http://www.w3.org/2000/svg"
 																			width="12"
@@ -163,7 +163,7 @@ export async function ResourceList() {
 																			></line>
 																		</svg>
 																	</div>
-																	<span className="text-xs text-gray-600">
+																	<span className="text-xs text-muted-foreground">
 																		下载
 																	</span>
 																</div>

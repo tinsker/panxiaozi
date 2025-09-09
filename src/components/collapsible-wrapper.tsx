@@ -27,7 +27,7 @@ export default function CollapsibleWrapper({ children, categories }: Props) {
 	return (
 		<div className="w-full">
 			<button
-				className="w-full flex items-center justify-between p-3 bg-gray-100 rounded-lg md:hidden"
+				className="w-full flex items-center justify-between p-3 bg-muted rounded-lg md:hidden"
 				onClick={() => setIsExpanded(!isExpanded)}
 			>
 				<span>{getCurrentCategoryName()}</span>
